@@ -123,7 +123,7 @@ function totalErrors() {
 
 // ─── Export corrected CSV ─────────────────────────────────────────────────────
 function buildCorrectedCSV() {
-  const header = SCHEMA_COLUMNS.map(c => c.col);
+  const header = SCHEMA_COLUMNS.map(c => c.name);
   const dataRows = csvRows.map(rowArr => {
     const rowObj = buildRowObj(rowArr);
     return SCHEMA_COLUMNS.map(col => {
