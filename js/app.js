@@ -123,16 +123,12 @@ function totalErrors() {
 
 // ─── Export corrected CSV ─────────────────────────────────────────────────────
 function buildCorrectedCSV() {
-  const header = OUTPUT_COLUMNS.map(c => c.key);
+  const header = SCHEMA_COLUMNS.map(c => c.name);
   const dataRows = csvRows.map(rowArr => {
     const rowObj = buildRowObj(rowArr);
-    return OUTPUT_COLUMNS.map(({ col }) => {
-      if (!col) return '';
-      const colDef = SCHEMA_MAP[col];
-      let v = rowObj[col];
-      if (colDef) {
-        try { v = colDef.autofix(v, rowObj) ?? v; } catch(e) { /* keep original */ }
-      }
+    return SCHEMA_COLUMNS.map(col => {
+      let v = rowObj[col.col];
+      try { v = col.autofix(v, rowObj) ?? v; } catch(e) { /* keep original */ }
       return v ?? '';
     });
   });

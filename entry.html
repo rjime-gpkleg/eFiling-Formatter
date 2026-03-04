@@ -538,8 +538,8 @@ function csvEscape(v) {
 }
 
 function buildCorrectedCSV() {
-  const header   = OUTPUT_COLUMNS.map(c => c.key);
-  const dataRows = records.map(rec => OUTPUT_COLUMNS.map(({ col }) => col ? (rec[col] ?? '') : ''));
+  const header   = SCHEMA_COLUMNS.map(c => c.name);
+  const dataRows = records.map(rec => SCHEMA_COLUMNS.map(c => rec[c.col] ?? ''));
   return [header, ...dataRows].map(r => r.map(csvEscape).join(',')).join('\r\n');
 }
 
