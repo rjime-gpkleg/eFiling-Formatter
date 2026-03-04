@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1042-S Manual Entry — TY 2025</title>
+<style>
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; font-size: 14px; }
+
+/* ── Header ── */
+header { background: #1a1a2e; color: #fff; padding: 16px 32px; display: flex; align-items: center; gap: 12px; }
+header h1 { font-size: 1.2rem; font-weight: 600; }
+header span { font-size: 0.8rem; opacity: 0.6; margin-left: 4px; }
+
+/* ── Layout ── */
+main { max-width: 1180px; margin: 20px auto; padding: 0 16px 56px; }
+
+.page-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.page-nav h2 { font-size: 1.05rem; font-weight: 700; flex: 1; }
+.back-link { font-size: 0.82rem; color: #6b7280; text-decoration: none; padding: 4px 10px; border: 1px solid #d1d5db; border-radius: 5px; background: #fff; transition: background .15s; }
+.back-link:hover { background: #f3f4f6; color: #374151; }
+
+/* ── Auto-set notice ── */
+.auto-note { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 16px; margin-bottom: 14px; font-size: 0.82rem; color: #1e40af; }
+
+/* ── Editing banner ── */
+.edit-banner { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 10px 16px; margin-bottom: 14px; font-size: 0.83rem; color: #92400e; font-weight: 600; display: none; }
+
+/* ── Form Section (mimics IRS form boxes) ── */
+.form-section { border: 1.5px solid #9ca3af; border-radius: 6px; margin-bottom: 10px; overflow: hidden; }
+.form-sec-head { background: #374151; color: #fff; padding: 5px 12px; font-size: 0.72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.form-row { display: flex; border-top: 1px solid #e5e7eb; }
+.form-row:first-of-type { border-top: none; }
+
+.fbox { border-right: 1px solid #e5e7eb; padding: 5px 8px 6px; min-width: 0; overflow: hidden; }
+.fbox:last-child { border-right: none; }
+
+.fbox-meta { display: flex; align-items: baseline; gap: 4px; margin-bottom: 3px; }
+.fbox-num { font-size: 0.58rem; font-weight: 700; color: #9ca3af; white-space: nowrap; background: #f3f4f6; padding: 0 4px; border-radius: 3px; flex-shrink: 0; }
+.fbox-label { font-size: 0.66rem; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fbox-req { color: #dc2626; font-weight: 700; font-size: 0.68rem; margin-left: auto; flex-shrink: 0; }
+
+.fbox-input, .fbox-select {
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid #d1d5db;
+  padding: 3px 2px;
+  font-size: 0.85rem;
+  background: transparent;
+  color: #1a1a2e;
+  font-family: inherit;
+}
+.fbox-input:focus, .fbox-select:focus { outline: none; border-bottom-color: #2563eb; }
+.fbox-input.err, .fbox-select.err { border-bottom-color: #dc2626; background: #fff5f5; }
+.fbox-err { font-size: 0.6rem; color: #dc2626; margin-top: 2px; min-height: 9px; line-height: 1.2; }
+
+/* ── Buttons ── */
+.btn-row { display: flex; gap: 10px; margin-top: 14px; justify-content: flex-end; }
+.btn { padding: 9px 20px; border-radius: 7px; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; transition: background .15s, opacity .15s; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-primary:hover:not(:disabled) { background: #1d4ed8; }
+.btn-success { background: #16a34a; color: #fff; }
+.btn-success:hover:not(:disabled) { background: #15803d; }
+.btn-ghost { background: transparent; color: #6b7280; border: 1px solid #d1d5db; }
+.btn-ghost:hover { background: #f3f4f6; }
+.btn-sm { padding: 4px 10px; font-size: 0.76rem; border-radius: 5px; cursor: pointer; border: 1px solid #d1d5db; background: #fff; color: #374151; transition: background .15s; }
+.btn-sm:hover { background: #f3f4f6; }
+.btn-sm-danger { padding: 4px 10px; font-size: 0.76rem; border-radius: 5px; cursor: pointer; border: 1px solid #fca5a5; background: #fee2e2; color: #dc2626; transition: background .15s; }
+.btn-sm-danger:hover { background: #fecaca; }
+
+/* ── Records Section ── */
+.records-card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.08); padding: 20px 24px; margin-top: 20px; }
+.records-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 14px; color: #374151; }
+.rec-count-info { font-size: 0.8rem; font-weight: 400; margin-left: 8px; }
+.rec-count-info.has-errs { color: #dc2626; }
+.rec-count-info.all-ok  { color: #16a34a; }
+
+.records-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.records-table th { background: #f3f4f6; padding: 6px 10px; text-align: left; font-weight: 600; color: #6b7280; font-size: 0.72rem; text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid #e5e7eb; }
+.records-table td { padding: 6px 10px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+.records-table tr:hover td { background: #fafafa; }
+.badge-ok  { background: #dcfce7; color: #15803d; padding: 2px 7px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+.badge-err { background: #fee2e2; color: #dc2626; padding: 2px 7px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header>
+  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0121 9.414V19a2 2 0 01-2 2z"/>
+  </svg>
+  <h1>1042-S eFiling Formatter <span>TY 2025</span></h1>
+</header>
+
+<main>
+  <div class="page-nav">
+    <h2>Manual Entry — IRS Form 1042-S (TY 2025)</h2>
+    <a class="back-link" href="home.html">← Home</a>
+  </div>
+
+  <div class="auto-note">
+    Fields <strong>Col A (Form Type)</strong>, <strong>Col B (Tax Year)</strong>, and <strong>Col C (TIN Type)</strong> are automatically set to <code>1042-S</code>, <code>2025</code>, and <code>EIN</code> in the exported CSV.
+  </div>
+
+  <div class="edit-banner" id="edit-banner">
+    Editing record <strong id="edit-num"></strong> — update the fields below and click <strong>Update Record</strong>.
+  </div>
+
+  <div id="form-container"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-ghost" id="btn-clear">Clear Form</button>
+    <button class="btn btn-primary" id="btn-add">+ Add Record</button>
+  </div>
+
+  <div id="records-section" style="display:none">
+    <div class="records-card">
+      <h3>
+        Records (<span id="rec-count">0</span>)
+        <span class="rec-count-info" id="rec-status"></span>
+      </h3>
+      <table class="records-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Form ID (W)</th>
+            <th>Recipient Name</th>
+            <th>Income Code</th>
+            <th>Gross Income</th>
+            <th>Fed. Tax W/H</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="rec-tbody"></tbody>
+      </table>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-success" id="btn-export">⬇ Download CSV</button>
+    </div>
+  </div>
+</main>
+
+<script src="js/schema.js"></script>
+<script>
+'use strict';
+
+// ─── State ────────────────────────────────────────────────────────────────────
+let records      = [];  // array of { ...rowObj, _errors: {col: msg} }
+let editingIndex = -1;  // -1 = new, >= 0 = editing existing
+
+// ─── Form Layout ──────────────────────────────────────────────────────────────
+// Each row item: [colLetter, boxLabel, flexGrow]
+// Cols A, B, C are static (auto-set) — not shown in form
+const FORM_LAYOUT = [
+  { title: 'Income & Tax', rows: [
+    [['AU','Box 1',1],  ['AV','Box 2',2],   ['AW','Box 3',1],  ['AX','Box 3a',1], ['AY','Box 3b',1.5]],
+    [['AZ','Box 4a',1], ['BA','Box 4b',1.5],['BB','Box 5',2],  ['BC','Box 6',2]],
+    [['BD','Box 7a',3], ['BE','Box 7b',1],  ['BF','Box 7c',1], ['BG','Box 7d',1]],
+    [['BH','Box 8',3],  ['BI','Box 9',3],   ['BJ','Box 11',3]],
+  ]},
+  { title: 'Withholding Agent', rows: [
+    [['D','',2],  ['E','',1.5], ['F','',1.5], ['G','',1],   ['W','',2]],
+    [['H','',4],  ['I','',4],   ['N','',2]],
+    [['J','',2],  ['K','',1.5], ['L','',2],   ['M','',1.5]],
+    [['O','',2.5],['P','',1],   ['Q','',3],   ['R','',3.5]],
+    [['S','',2.5],['T','',1],   ['U','',1],   ['V','',1.5]],
+  ]},
+  { title: 'Recipient (Box 13)', rows: [
+    [['X','Box 13a',1],['AF','Box 13b',1],['AN','Box 13f',1],['AO','Box 13g',1],['AP','Box 13h',2.5],['AR','Box 13j',1],['AS','Box 13k',2],['AT','Box 13l',1.5]],
+    [['Y','',4],['Z','',4],['AE','',2]],
+    [['AA','',2],['AB','',1.5],['AC','',2],['AD','',1.5]],
+    [['AG','Box 13c',3],['AH','',2.5],['AI','',1],['AJ','',1],['AK','',1.5]],
+    [['AL','',1.5],['AM','Box 13e',2.5],['AQ','Box 13i',3]],
+  ]},
+  { title: 'Primary Withholding Agent (Box 14)', rows: [
+    [['BK','Box 14a',4],['BL','Box 14b',2],['BM','',4]],
+  ]},
+  { title: 'Intermediary / Flow-Through Entity (Box 15)', rows: [
+    [['BN','Box 15',1],['BO','Box 15a',2],['BP','Box 15b',1.5],['BQ','Box 15c',1.5],['BR','Box 15d',1],['BZ','Box 15e',2],['CA','Box 15f',1]],
+    [['BS','',4],['BT','',4],['BY','',2]],
+    [['BU','',2],['BV','',1.5],['BW','',2],['BX','',1.5]],
+    [['CB','Box 15g',3],['CC','Box 15h',3.5],['CD','',2.5],['CE','',1],['CF','',1],['CG','',1.5]],
+  ]},
+  { title: 'Payer (Box 16)', rows: [
+    [['CH','Box 16a',1],['CI','',4],['CJ','',4],['CO','',2]],
+    [['CK','',2],['CL','',1.5],['CM','',2],['CN','',1.5]],
+    [['CP','Box 16b',2],['CQ','Box 16c',2],['CR','Box 16d',1.5],['CS','Box 16e',1.5]],
+  ]},
+  { title: 'State Filing (Box 17)', rows: [
+    [['CT','Box 17c',1],['CU','Box 17a',2],['CV','Box 17b',2],['CW','',2],['CX','',2],['CY','',3]],
+    [['CZ','',1],       ['DA','',2],       ['DB','',2],       ['DC','',2],['DD','',2],['DE','',3]],
+  ]},
+];
+
+// ─── Field input metadata (select dropdowns for coded fields) ─────────────────
+const FIELD_OPTS = {
+  'G':  { type:'select', options:['','B','I'] },
+  'X':  { type:'select', options:['','B','I'] },
+  'BR': { type:'select', options:['','B','I'] },
+  'CH': { type:'select', options:['','B','I'] },
+  'BE': { type:'select', options:['','Y','N'] },
+  'BF': { type:'select', options:['','Y','N'] },
+  'BG': { type:'select', options:['','Y','N'] },
+  'BN': { type:'select', options:['','Y','N'] },
+  'AW': { type:'select', options:['','3','4'] },
+  'E':  { type:'select', options:[''].concat(CH3_WA) },
+  'F':  { type:'select', options:[''].concat(CH4_ALL) },
+  'AN': { type:'select', options:[''].concat(CH3_RECIP) },
+  'AO': { type:'select', options:[''].concat(CH4_ALL) },
+  'BP': { type:'select', options:[''].concat(CH3_WA) },
+  'BQ': { type:'select', options:[''].concat(CH4_ALL) },
+  'CR': { type:'select', options:[''].concat(CH3_WA) },
+  'CS': { type:'select', options:[''].concat(CH4_ALL) },
+  'AU': { type:'select', options:[''].concat(INCOME) },
+  'AX': { type:'select', options:[''].concat(CH3_EX) },
+  'AY': { type:'select', options:[''].concat(CH3_RATE) },
+  'AZ': { type:'select', options:[''].concat(CH4_EX) },
+  'BA': { type:'select', options:[''].concat(CH4_RATE) },
+  'AR': { type:'select', options:[''].concat(LOB) },
+  'AL': { type:'select', options:['','SSN','EIN','ATIN','ITIN','QI-EIN','UND'] },
+};
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function getFieldLabel(col) {
+  const s = SCHEMA_MAP[col];
+  if (!s) return col;
+  return s.name
+    .replace(/^Box\s+[\w./]+\s*[–-]\s*/i, '')
+    .replace(/^(Additional\s+)?(Withholding Agent'?s?|Primary Withholding Agent'?s?)\s+/i, '')
+    .replace(/^(Additional\s+)?Recipient'?s?\s+/i, '')
+    .replace(/^(Additional\s+)?Intermediary\/FT\s+/i, '')
+    .replace(/^(Additional\s+)?Payer'?s?\s+/i, '')
+    .replace(/^State \d+\s*[–-]\s*Box\s+[\w.]+\s*[–-]\s*/i, '')
+    .replace(/^State \d+\s*[–-]\s*/i, '')
+    .trim();
+}
+
+// ─── Form Rendering ───────────────────────────────────────────────────────────
+function renderForm() {
+  const container = document.getElementById('form-container');
+  container.innerHTML = '';
+
+  for (const section of FORM_LAYOUT) {
+    const secDiv = document.createElement('div');
+    secDiv.className = 'form-section';
+
+    const head = document.createElement('div');
+    head.className = 'form-sec-head';
+    head.textContent = section.title;
+    secDiv.appendChild(head);
+
+    for (const row of section.rows) {
+      const rowDiv = document.createElement('div');
+      rowDiv.className = 'form-row';
+
+      for (const [col, boxLabel, flex] of row) {
+        const colDef = SCHEMA_MAP[col];
+        if (!colDef) continue;
+
+        const box = document.createElement('div');
+        box.className = 'fbox';
+        box.style.flex = String(flex);
+
+        // Meta row: box number + field label + required indicator
+        const meta = document.createElement('div');
+        meta.className = 'fbox-meta';
+
+        if (boxLabel) {
+          const numSpan = document.createElement('span');
+          numSpan.className = 'fbox-num';
+          numSpan.textContent = boxLabel;
+          meta.appendChild(numSpan);
+        }
+
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'fbox-label';
+        labelSpan.textContent = getFieldLabel(col);
+        if (SCHEMA_HINTS[col]) labelSpan.title = SCHEMA_HINTS[col];
+        meta.appendChild(labelSpan);
+
+        if (colDef.required) {
+          const req = document.createElement('span');
+          req.className = 'fbox-req';
+          req.textContent = '*';
+          meta.appendChild(req);
+        }
+
+        box.appendChild(meta);
+
+        // Input element
+        const opts = FIELD_OPTS[col];
+        let inputEl;
+
+        if (opts?.type === 'select') {
+          inputEl = document.createElement('select');
+          inputEl.className = 'fbox-select';
+          opts.options.forEach(opt => {
+            const o = document.createElement('option');
+            o.value = opt;
+            o.textContent = opt || '—';
+            inputEl.appendChild(o);
+          });
+        } else {
+          inputEl = document.createElement('input');
+          inputEl.type = 'text';
+          inputEl.className = 'fbox-input';
+          if (SCHEMA_HINTS[col]) inputEl.title = SCHEMA_HINTS[col];
+        }
+
+        inputEl.id = 'f-' + col;
+        inputEl.dataset.col = col;
+        inputEl.addEventListener('blur', () => validateField(col));
+        box.appendChild(inputEl);
+
+        // Error message
+        const errDiv = document.createElement('div');
+        errDiv.className = 'fbox-err';
+        errDiv.id = 'ferr-' + col;
+        box.appendChild(errDiv);
+
+        rowDiv.appendChild(box);
+      }
+
+      secDiv.appendChild(rowDiv);
+    }
+
+    container.appendChild(secDiv);
+  }
+}
+
+// ─── Per-field validation (on blur) ──────────────────────────────────────────
+function validateField(col) {
+  const inputEl = document.getElementById('f-' + col);
+  const errEl   = document.getElementById('ferr-' + col);
+  if (!inputEl || !errEl) return;
+
+  const colDef = SCHEMA_MAP[col];
+  if (!colDef) return;
+
+  const rowObj = formToRecord();
+  let err = null;
+  try { err = colDef.validate(rowObj[col], rowObj); } catch(e) { /* ignore */ }
+
+  if (err) {
+    inputEl.classList.add('err');
+    errEl.textContent = err;
+  } else {
+    inputEl.classList.remove('err');
+    errEl.textContent = '';
+  }
+}
+
+// ─── Form I/O ────────────────────────────────────────────────────────────────
+function formToRecord() {
+  // Start with static values for A, B, C
+  const obj = { A: '1042-S', B: '2025', C: 'EIN' };
+  for (const col of SCHEMA_COLUMNS) {
+    const el = document.getElementById('f-' + col.col);
+    // For A, B, C there is no input — keep the static value
+    obj[col.col] = el ? el.value : (obj[col.col] ?? '');
+  }
+  return obj;
+}
+
+function recordToForm(rowObj) {
+  clearFormInputs();
+  for (const col of SCHEMA_COLUMNS) {
+    const el = document.getElementById('f-' + col.col);
+    if (el && rowObj[col.col] !== undefined) {
+      el.value = rowObj[col.col];
+    }
+  }
+}
+
+function clearFormInputs() {
+  for (const col of SCHEMA_COLUMNS) {
+    const el = document.getElementById('f-' + col.col);
+    if (el) { el.value = ''; el.classList.remove('err'); }
+    const errEl = document.getElementById('ferr-' + col.col);
+    if (errEl) errEl.textContent = '';
+  }
+}
+
+function clearForm() {
+  clearFormInputs();
+  exitEditMode();
+}
+
+function exitEditMode() {
+  editingIndex = -1;
+  document.getElementById('btn-add').textContent = '+ Add Record';
+  document.getElementById('edit-banner').style.display = 'none';
+}
+
+// ─── Validation ───────────────────────────────────────────────────────────────
+function validateRecord(rowObj) {
+  const errors = {};
+  for (const col of SCHEMA_COLUMNS) {
+    try {
+      const err = col.validate(rowObj[col.col], rowObj);
+      if (err) errors[col.col] = err;
+    } catch(e) { /* ignore */ }
+  }
+  return errors;
+}
+
+// ─── Record Management ────────────────────────────────────────────────────────
+function addOrUpdate() {
+  const raw = formToRecord();
+
+  // Apply autofix to each field
+  const fixed = { A: '1042-S', B: '2025', C: 'EIN' };
+  for (const col of SCHEMA_COLUMNS) {
+    let v = raw[col.col];
+    try { v = col.autofix(v, raw) ?? v; } catch(e) { /* keep */ }
+    fixed[col.col] = v;
+  }
+  fixed.A = '1042-S'; fixed.B = '2025'; fixed.C = 'EIN';
+
+  const errors = validateRecord(fixed);
+  const rec = { ...fixed, _errors: errors };
+
+  if (editingIndex >= 0) {
+    records[editingIndex] = rec;
+  } else {
+    records.push(rec);
+  }
+
+  clearForm();
+  renderRecordsTable();
+  document.getElementById('records-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function editRecord(idx) {
+  editingIndex = idx;
+  recordToForm(records[idx]);
+  document.getElementById('btn-add').textContent = '✓ Update Record';
+  document.getElementById('edit-banner').style.display = 'block';
+  document.getElementById('edit-num').textContent = '#' + (idx + 1);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function deleteRecord(idx) {
+  records.splice(idx, 1);
+  if (editingIndex === idx) { clearForm(); }
+  else if (editingIndex > idx) { editingIndex--; }
+  renderRecordsTable();
+}
+
+// ─── Records Table ────────────────────────────────────────────────────────────
+function renderRecordsTable() {
+  const section  = document.getElementById('records-section');
+  const tbody    = document.getElementById('rec-tbody');
+  const recCount = document.getElementById('rec-count');
+  const recStatus = document.getElementById('rec-status');
+
+  section.style.display = records.length > 0 ? 'block' : 'none';
+  recCount.textContent  = records.length;
+
+  const totalErrs = records.reduce((s, r) => s + Object.keys(r._errors || {}).length, 0);
+  if (totalErrs > 0) {
+    recStatus.textContent = totalErrs + ' total error(s)';
+    recStatus.className = 'rec-count-info has-errs';
+  } else if (records.length > 0) {
+    recStatus.textContent = '✓ All clean';
+    recStatus.className = 'rec-count-info all-ok';
+  } else {
+    recStatus.textContent = '';
+    recStatus.className = 'rec-count-info';
+  }
+
+  tbody.innerHTML = '';
+  records.forEach((rec, idx) => {
+    const errCount  = Object.keys(rec._errors || {}).length;
+    const recipName = (rec.Y || '').trim()
+      || [(rec.AA || '').trim(), (rec.AC || '').trim()].filter(Boolean).join(' ')
+      || '—';
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      `<td>${idx + 1}</td>
+       <td style="font-family:monospace;font-size:.78rem">${escHtml(rec.W || '—')}</td>
+       <td>${escHtml(recipName)}</td>
+       <td style="text-align:center">${escHtml(rec.AU || '—')}</td>
+       <td>${escHtml(rec.AV || '—')}</td>
+       <td>${escHtml(rec.BD || '—')}</td>
+       <td><span class="${errCount === 0 ? 'badge-ok' : 'badge-err'}">${errCount === 0 ? '✓ OK' : errCount + ' error' + (errCount > 1 ? 's' : '')}</span></td>
+       <td style="white-space:nowrap;display:flex;gap:4px">
+         <button class="btn-sm" onclick="editRecord(${idx})">Edit</button>
+         <button class="btn-sm-danger" onclick="deleteRecord(${idx})">Delete</button>
+       </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ─── CSV Export ───────────────────────────────────────────────────────────────
+function csvEscape(v) {
+  const s = String(v ?? '');
+  if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+  return s;
+}
+
+function buildCorrectedCSV() {
+  const header   = SCHEMA_COLUMNS.map(c => c.name);
+  const dataRows = records.map(rec => SCHEMA_COLUMNS.map(c => rec[c.col] ?? ''));
+  return [header, ...dataRows].map(r => r.map(csvEscape).join(',')).join('\r\n');
+}
+
+function downloadCSV() {
+  const csv  = buildCorrectedCSV();
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `1042S_manual_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderForm();
+  document.getElementById('btn-clear').onclick  = clearForm;
+  document.getElementById('btn-add').onclick    = addOrUpdate;
+  document.getElementById('btn-export').onclick = downloadCSV;
+});
+</script>
+
+</body>
+</html>

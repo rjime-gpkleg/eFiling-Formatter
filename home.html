@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1042-S eFiling Formatter — TY 2025</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+
+header { background: #1a1a2e; color: #fff; padding: 16px 32px; display: flex; align-items: center; gap: 12px; }
+header h1 { font-size: 1.2rem; font-weight: 600; }
+header span { font-size: 0.8rem; opacity: 0.6; margin-left: 4px; }
+
+main { max-width: 860px; margin: 56px auto; padding: 0 16px; }
+
+.intro { text-align: center; margin-bottom: 40px; }
+.intro h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+.intro p { color: #6b7280; font-size: 0.95rem; max-width: 520px; margin: 0 auto; }
+
+.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+.mode-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.04);
+  padding: 32px 28px;
+  cursor: pointer;
+  transition: box-shadow .2s, transform .15s;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-decoration: none;
+  color: inherit;
+  border: 2px solid transparent;
+}
+.mode-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,.12), 0 12px 32px rgba(0,0,0,.08);
+  transform: translateY(-3px);
+}
+.mode-card.blue:hover { border-color: #bfdbfe; }
+.mode-card.green:hover { border-color: #bbf7d0; }
+
+.mode-icon {
+  width: 56px; height: 56px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px; flex-shrink: 0;
+}
+.mode-icon.blue  { background: #dbeafe; color: #2563eb; }
+.mode-icon.green { background: #dcfce7; color: #16a34a; }
+
+.mode-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; }
+.mode-card p { font-size: 0.875rem; color: #6b7280; line-height: 1.6; flex: 1; margin-bottom: 22px; }
+
+.badge-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+.badge { font-size: 0.72rem; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
+.badge-blue  { background: #dbeafe; color: #1d4ed8; }
+.badge-green { background: #dcfce7; color: #15803d; }
+
+.btn { display: inline-block; padding: 10px 22px; border-radius: 7px; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; text-decoration: none; transition: background .15s; }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-primary:hover { background: #1d4ed8; }
+.btn-success { background: #16a34a; color: #fff; }
+.btn-success:hover { background: #15803d; }
+
+@media (max-width: 580px) { .mode-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0121 9.414V19a2 2 0 01-2 2z"/>
+  </svg>
+  <h1>1042-S eFiling Formatter <span>TY 2025</span></h1>
+</header>
+
+<main>
+  <div class="intro">
+    <h2>How would you like to prepare your 1042-S?</h2>
+    <p>Choose a workflow to get started. Both options validate your data and export an e-file-ready CSV.</p>
+  </div>
+
+  <div class="mode-grid">
+
+    <!-- Option 1: Convert a File -->
+    <a class="mode-card blue" href="index.html">
+      <div class="mode-icon blue">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+        </svg>
+      </div>
+      <h3>Convert a File</h3>
+      <p>Upload a CSV or Excel export (e.g. from SurePrep), map your columns to the 1042-S template, validate all fields, and download a corrected CSV.</p>
+      <div class="badge-list">
+        <span class="badge badge-blue">CSV / XLS / XLSX</span>
+        <span class="badge badge-blue">Auto-map columns</span>
+        <span class="badge badge-blue">Auto-fix formatting</span>
+      </div>
+      <span class="btn btn-primary">Get Started →</span>
+    </a>
+
+    <!-- Option 2: Manual Entry -->
+    <a class="mode-card green" href="entry.html">
+      <div class="mode-icon green">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/>
+        </svg>
+      </div>
+      <h3>Manual Entry</h3>
+      <p>Fill in the 1042-S fields directly in a form that mirrors the actual IRS form layout. Add multiple recipient records, validate as you go, and export.</p>
+      <div class="badge-list">
+        <span class="badge badge-green">Form-style layout</span>
+        <span class="badge badge-green">Multi-record</span>
+        <span class="badge badge-green">Inline validation</span>
+      </div>
+      <span class="btn btn-success">Get Started →</span>
+    </a>
+
+  </div>
+</main>
+
+</body>
+</html>
