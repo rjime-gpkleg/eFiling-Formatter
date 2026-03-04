@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"C:/Users/rjimenez/Downloads/read_xls2.ps1\")"
-    ]
-  }
-}
