@@ -84,6 +84,23 @@ main { max-width: 1180px; margin: 20px auto; padding: 0 16px 56px; }
 .records-table tr:hover td { background: #fafafa; }
 .badge-ok  { background: #dcfce7; color: #15803d; padding: 2px 7px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
 .badge-err { background: #fee2e2; color: #dc2626; padding: 2px 7px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+
+/* ── Field info icon ── */
+.fbox-info { font-size: 0.6rem; color: #d1d5db; cursor: help; flex-shrink: 0; line-height: 1; user-select: none; }
+.fbox[data-hint]:hover .fbox-info { color: #2563eb; }
+
+/* ── Custom tooltip ── */
+.tip {
+  position: fixed; z-index: 9999; pointer-events: none;
+  background: #1a1a2e; color: #e2e8f0;
+  font-size: 0.78rem; line-height: 1.55;
+  padding: 9px 13px; border-radius: 7px;
+  max-width: 300px; word-break: break-word;
+  box-shadow: 0 4px 20px rgba(0,0,0,.35);
+  opacity: 0; transition: opacity .12s ease;
+}
+.tip.show { opacity: 1; }
+.tip strong { color: #fff; }
 </style>
 </head>
 <body>
@@ -143,6 +160,8 @@ main { max-width: 1180px; margin: 20px auto; padding: 0 16px 56px; }
     </div>
   </div>
 </main>
+
+<div id="tip" class="tip"></div>
 
 <script src="js/schema.js"></script>
 <script>
@@ -271,7 +290,11 @@ function renderForm() {
         box.className = 'fbox';
         box.style.flex = String(flex);
 
-        // Meta row: box number + field label + required indicator
+        // Store hint for custom tooltip
+        const hint = SCHEMA_HINTS[col];
+        if (hint) box.dataset.hint = hint;
+
+        // Meta row: box number + field label + required indicator + info icon
         const meta = document.createElement('div');
         meta.className = 'fbox-meta';
 
@@ -285,7 +308,6 @@ function renderForm() {
         const labelSpan = document.createElement('span');
         labelSpan.className = 'fbox-label';
         labelSpan.textContent = getFieldLabel(col);
-        if (SCHEMA_HINTS[col]) labelSpan.title = SCHEMA_HINTS[col];
         meta.appendChild(labelSpan);
 
         if (colDef.required) {
@@ -293,6 +315,13 @@ function renderForm() {
           req.className = 'fbox-req';
           req.textContent = '*';
           meta.appendChild(req);
+        }
+
+        if (hint) {
+          const infoSpan = document.createElement('span');
+          infoSpan.className = 'fbox-info';
+          infoSpan.textContent = 'ⓘ';
+          meta.appendChild(infoSpan);
         }
 
         box.appendChild(meta);
@@ -314,7 +343,6 @@ function renderForm() {
           inputEl = document.createElement('input');
           inputEl.type = 'text';
           inputEl.className = 'fbox-input';
-          if (SCHEMA_HINTS[col]) inputEl.title = SCHEMA_HINTS[col];
         }
 
         inputEl.id = 'f-' + col;
@@ -510,8 +538,8 @@ function csvEscape(v) {
 }
 
 function buildCorrectedCSV() {
-  const header   = SCHEMA_COLUMNS.map(c => c.name);
-  const dataRows = records.map(rec => SCHEMA_COLUMNS.map(c => rec[c.col] ?? ''));
+  const header   = OUTPUT_COLUMNS.map(c => c.key);
+  const dataRows = records.map(rec => OUTPUT_COLUMNS.map(({ col }) => col ? (rec[col] ?? '') : ''));
   return [header, ...dataRows].map(r => r.map(csvEscape).join(',')).join('\r\n');
 }
 
@@ -528,9 +556,43 @@ function downloadCSV() {
   URL.revokeObjectURL(url);
 }
 
+// ─── Tooltip ──────────────────────────────────────────────────────────────────
+function initTooltips() {
+  const tip = document.getElementById('tip');
+  let active = null;
+
+  document.addEventListener('mouseover', e => {
+    const box = e.target.closest('[data-hint]');
+    if (!box) { tip.classList.remove('show'); active = null; return; }
+    if (box === active) return;
+    active = box;
+    // Bold the field name, then show the hint text
+    const col   = box.querySelector('[data-col]')?.dataset.col;
+    const name  = col ? (SCHEMA_MAP[col]?.name || col) : '';
+    tip.innerHTML = (name ? `<strong>${escHtml(name)}</strong><br>` : '') + escHtml(box.dataset.hint);
+    tip.classList.add('show');
+    place(e);
+  });
+
+  document.addEventListener('mousemove', e => { if (active) place(e); });
+
+  document.addEventListener('mouseout', e => {
+    const to = e.relatedTarget;
+    if (!to || !to.closest('[data-hint]')) { tip.classList.remove('show'); active = null; }
+  });
+
+  function place(e) {
+    const x = e.clientX + 14, y = e.clientY + 14;
+    const tw = tip.offsetWidth || 240, th = tip.offsetHeight || 60;
+    tip.style.left = Math.min(x, window.innerWidth  - tw - 10) + 'px';
+    tip.style.top  = (y + th > window.innerHeight ? e.clientY - th - 10 : y) + 'px';
+  }
+}
+
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   renderForm();
+  initTooltips();
   document.getElementById('btn-clear').onclick  = clearForm;
   document.getElementById('btn-add').onclick    = addOrUpdate;
   document.getElementById('btn-export').onclick = downloadCSV;

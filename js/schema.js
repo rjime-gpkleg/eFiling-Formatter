@@ -726,3 +726,38 @@ const SCHEMA_HINTS = {
   'DD': 'Dollar amount — State 2 local income tax withheld',
   'DE': 'Up to 60 chars — state-specific additional data for State 2',
 };
+
+// ─── Output column mapping ────────────────────────────────────────────────────
+// Maps the ingestion template snake_case keys (row 1 of the template CSV) to
+// internal schema column letters. col=null means no schema equivalent (output blank).
+const OUTPUT_COLUMNS = [
+  { key: 'account_id',                   col: 'W'  },
+  { key: 'income_code',                  col: 'AU' },
+  { key: 'gross_income',                 col: 'AV' },
+  { key: 'chapter_indicator',            col: 'AW' },
+  { key: 'exemption_code_3a',            col: 'AX' },
+  { key: 'tax_rate_3b',                  col: 'AY' },
+  { key: 'recipient_lob_code',           col: 'AR' },
+  { key: 'exemption_code_4a',            col: 'AZ' },
+  { key: 'tax_rate_4b',                  col: 'BA' },
+  { key: 'withholding_allowance',        col: 'BB' },
+  { key: 'federal_tax_withheld',         col: 'BD' },
+  { key: 'not_escrow_checkbox',          col: 'BE' },
+  { key: 'wh_in_sub_year_checkbox',      col: 'BF' },
+  { key: 'qi_wfp_wft',                   col: 'BG' },
+  { key: 'tax_withheld_by_other_agents', col: 'BH' },
+  { key: 'overwithheld_tax_repaid',      col: 'BI' },
+  { key: 'tax_paid_by_wha',             col: 'BJ' },
+  { key: 'primary_wha_name',             col: 'BK' },
+  { key: 'primary_wha_ein',              col: 'BL' },
+  { key: 'prorata_basis_checkbox',       col: 'BN' },
+  { key: 'payer_name',                   col: 'CI' },
+  { key: 'payer_tin',                    col: 'CP' },
+  { key: 'payer_giin',                   col: 'CQ' },
+  { key: 'payer_ch3_status',             col: 'CR' },
+  { key: 'payer_ch4_status',             col: 'CS' },
+  { key: 'state_withholding',            col: 'CU' },
+  { key: 'payers_state_number',          col: 'CV' },
+  { key: 'state_name',                   col: 'CT' },
+  { key: 'final_return',                 col: null },
+];

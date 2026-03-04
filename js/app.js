@@ -123,12 +123,16 @@ function totalErrors() {
 
 // ─── Export corrected CSV ─────────────────────────────────────────────────────
 function buildCorrectedCSV() {
-  const header = SCHEMA_COLUMNS.map(c => c.name);
+  const header = OUTPUT_COLUMNS.map(c => c.key);
   const dataRows = csvRows.map(rowArr => {
     const rowObj = buildRowObj(rowArr);
-    return SCHEMA_COLUMNS.map(col => {
-      let v = rowObj[col.col];
-      try { v = col.autofix(v, rowObj) ?? v; } catch(e) { /* keep original */ }
+    return OUTPUT_COLUMNS.map(({ col }) => {
+      if (!col) return '';
+      const colDef = SCHEMA_MAP[col];
+      let v = rowObj[col];
+      if (colDef) {
+        try { v = colDef.autofix(v, rowObj) ?? v; } catch(e) { /* keep original */ }
+      }
       return v ?? '';
     });
   });
@@ -171,6 +175,12 @@ function initUpload() {
   }
 
   btnNext.addEventListener('click', () => {
+    // Re-apply the header row at step transition so the current input value is always used
+    if (allParsed.length) {
+      const hRow = parseInt(hdrInput?.value) || 1;
+      const { headers, rows } = applyHeaderRow(allParsed, hRow);
+      if (rows.length) { csvHeaders = headers; csvRows = rows; }
+    }
     // Apply selected preset (if any) before building mapping UI
     const presetId = presetSel?.value;
     activePreset = PRESETS.find(p => p.id === presetId) ?? null;
@@ -222,9 +232,9 @@ function initUpload() {
     }
   }
 
-  // Allow re-parsing if header row changes after file load
+  // Allow re-parsing if header row changes after file load (fires on spinner clicks too)
   if (hdrInput) {
-    hdrInput.addEventListener('change', () => {
+    hdrInput.addEventListener('input', () => {
       if (!allParsed.length) return;
       const hRow = parseInt(hdrInput.value) || 1;
       const { headers, rows } = applyHeaderRow(allParsed, hRow);
