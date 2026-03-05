@@ -165,83 +165,83 @@ const SCHEMA_COLUMNS = [
 { col:'B',  name:'Tax Year',                                   group:'Withholding Agent', required:false,
   validate: ()=>null, autofix: ()=>'2025' },
 
-{ col:'C',  name:'Withholding Agent TIN Type',                 group:'Withholding Agent', required:true,
+{ col:'C',  name:'Withholding agent TIN Type',                 group:'Withholding Agent', required:true,
   validate: v => blank(v) ? 'Required' : v==='EIN' ? null : 'Must be "EIN"',
   autofix:  () => 'EIN' },
 
-{ col:'D',  name:'Withholding Agent EIN',                      group:'Withholding Agent', required:true,
+{ col:'D',  name:'Withholding agent EIN',                      group:'Withholding Agent', required:true,
   validate: v => blank(v) ? 'Required' : chkEIN(v),
   autofix:  v => fixEIN(v) },
 
-{ col:'E',  name:'Ch. 3 Status Code (Withholding Agent)',      group:'Withholding Agent', required:true,
+{ col:'E',  name:'Ch. 3 status code',      group:'Withholding Agent', required:true,
   validate: v => blank(v) ? 'Required' : chkCode(v, CH3_WA),
   autofix:  v => fixCode2(v) },
 
-{ col:'F',  name:'Ch. 4 Status Code (Withholding Agent)',      group:'Withholding Agent', required:true,
+{ col:'F',  name:'Ch. 4 status code',      group:'Withholding Agent', required:true,
   validate: v => blank(v) ? 'Required' : chkCode(v, CH4_ALL),
   autofix:  v => fixCode2(v) },
 
-{ col:'G',  name:'Withholding Agent Name Type',                group:'Withholding Agent', required:true,
+{ col:'G',  name:'Withholding agent Name Type',                group:'Withholding Agent', required:true,
   validate: v => blank(v) ? 'Required' : (v==='B'||v==='I') ? null : 'Must be "B" or "I"',
   autofix:  v => fixUp(v) },
 
-{ col:'H',  name:'Withholding Agent Business/Entity Name Line 1', group:'Withholding Agent', required:false,
+{ col:'H',  name:'Withholding agent Business or Entity Name Line 1', group:'Withholding Agent', required:false,
   validate: (v,r) => { if(r?.G==='B'&&blank(v)) return 'Required when Name Type is "B"'; return chkName(v,40,/^[A-Za-z0-9 \-#()&']*$/); },
   autofix:  v => fixSp(v) },
 
-{ col:'I',  name:'Withholding Agent Business/Entity Name Line 2', group:'Withholding Agent', required:false,
+{ col:'I',  name:'Withholding agent Business or Entity Name Line 2', group:'Withholding Agent', required:false,
   validate: v => chkName(v,40,/^[A-Za-z0-9 \-#()&'\/%]*$/),
   autofix:  v => fixSp(v) },
 
-{ col:'J',  name:'Withholding Agent First Name',               group:'Withholding Agent', required:false,
+{ col:'J',  name:'Withholding agent First Name',               group:'Withholding Agent', required:false,
   validate: (v,r) => { if(r?.G==='I'&&blank(v)) return 'Required when Name Type is "I"'; if(!blank(r?.L)&&blank(v)) return 'Required when Last Name is provided'; return chkName(v,20,/^[A-Za-z \-]*$/); },
   autofix:  v => fixSp(v) },
 
-{ col:'K',  name:'Withholding Agent Middle Name',              group:'Withholding Agent', required:false,
+{ col:'K',  name:'Withholding agent Middle Name',              group:'Withholding Agent', required:false,
   validate: v => chkName(v,20,/^[A-Za-z \-]*$/),
   autofix:  v => fixSp(v) },
 
-{ col:'L',  name:'Withholding Agent Last Name',                group:'Withholding Agent', required:false,
+{ col:'L',  name:'Withholding agent Last Name (Surname)',                group:'Withholding Agent', required:false,
   validate: (v,r) => { if(r?.G==='I'&&blank(v)) return 'Required when Name Type is "I"'; if(!blank(r?.J)&&blank(v)) return 'Required when First Name is provided'; return chkName(v,20,/^[A-Za-z \-]*$/); },
   autofix:  v => fixSp(v) },
 
-{ col:'M',  name:'Withholding Agent Suffix',                   group:'Withholding Agent', required:false,
+{ col:'M',  name:'Withholding agent Suffix',                   group:'Withholding Agent', required:false,
   validate: v => chkName(v,20,/^[A-Za-z \-]*$/),
   autofix:  v => fixSp(v) },
 
-{ col:'N',  name:'Additional Withholding Agent Name',          group:'Withholding Agent', required:false,
+{ col:'N',  name:'Additional Withholding agent Name',          group:'Withholding Agent', required:false,
   validate: v => chkAddlName(v),
   autofix:  v => fixSp(v) },
 
-{ col:'O',  name:'Withholding Agent GIIN',                     group:'Withholding Agent', required:false,
+{ col:'O',  name:"Withholding agent's global intermediary identification number (GIIN)",                     group:'Withholding Agent', required:false,
   validate: v => chkGIIN(v),
   autofix:  v => v ? String(v).trim() : v },
 
-{ col:'P',  name:'Withholding Agent Country Code (Tax)',       group:'Withholding Agent', required:true,
+{ col:'P',  name:"Withholding agent's Country code",       group:'Withholding Agent', required:true,
   validate: v => blank(v) ? 'Required' : chkCountry(v),
   autofix:  v => fixUp(v) },
 
-{ col:'Q',  name:'Withholding Agent Foreign Tax ID Number',    group:'Withholding Agent', required:false,
+{ col:'Q',  name:'Foreign tax identification number',    group:'Withholding Agent', required:false,
   validate: v => chkFTIN(v),
   autofix:  v => v ? String(v).trim() : v },
 
-{ col:'R',  name:'Withholding Agent Address (Number and Street)', group:'Withholding Agent', required:true,
+{ col:'R',  name:'Withholding agent Address (number and street)', group:'Withholding Agent', required:true,
   validate: v => blank(v) ? 'Required' : chkAddress(v),
   autofix:  v => fixSp(v) },
 
-{ col:'S',  name:'Withholding Agent City/Town',                group:'Withholding Agent', required:false,
+{ col:'S',  name:'Withholding agent City/Town',                group:'Withholding Agent', required:false,
   validate: (v,r) => { if(isUS(r?.U)&&blank(v)) return 'Required for domestic addresses'; return chkCity(v); },
   autofix:  v => fixSp(v) },
 
-{ col:'T',  name:'Withholding Agent State/Territory',          group:'Withholding Agent', required:false,
+{ col:'T',  name:'Withholding agent State/Province/Territory',          group:'Withholding Agent', required:false,
   validate: (v,r) => { if(isUS(r?.U)&&blank(v)) return 'Required for domestic addresses'; return chkState(v, isUS(r?.U)); },
   autofix:  v => fixUp(v) },
 
-{ col:'U',  name:'Withholding Agent Country (Address)',        group:'Withholding Agent', required:true,
+{ col:'U',  name:'Withholding agent Country',        group:'Withholding Agent', required:true,
   validate: v => blank(v) ? 'Required' : chkCountry(v),
   autofix:  v => fixUp(v) },
 
-{ col:'V',  name:'Withholding Agent ZIP/Postal Code',          group:'Withholding Agent', required:false,
+{ col:'V',  name:'Withholding agent ZIP/Postal Code',          group:'Withholding Agent', required:false,
   validate: (v,r) => { if(isUS(r?.U)&&blank(v)) return 'Required for domestic addresses'; return chkZIP(v, isUS(r?.U)); },
   autofix:  v => v },
 
@@ -251,15 +251,15 @@ const SCHEMA_COLUMNS = [
   autofix:  v => v },
 
 // ── Recipient ─────────────────────────────────────────────────────────────────
-{ col:'X',  name:'Box 13a – Recipient Name Type',              group:'Recipient', required:true,
+{ col:'X',  name:'Box 13a - Recipient Name Type',              group:'Recipient', required:true,
   validate: v => blank(v) ? 'Required' : (v==='B'||v==='I') ? null : 'Must be "B" or "I"',
   autofix:  v => fixUp(v) },
 
-{ col:'Y',  name:'Recipient Business/Entity Name Line 1',      group:'Recipient', required:false,
+{ col:'Y',  name:'Recipient Business or Entity Name Line 1',      group:'Recipient', required:false,
   validate: (v,r) => { if(r?.X==='B'&&blank(v)) return 'Required when Recipient Name Type is "B"'; return chkName(v,40,/^[A-Za-z0-9 \-#()&']*$/); },
   autofix:  v => fixSp(v) },
 
-{ col:'Z',  name:'Recipient Business/Entity Name Line 2',      group:'Recipient', required:false,
+{ col:'Z',  name:'Recipient Business or Entity Name Line 2',      group:'Recipient', required:false,
   validate: v => chkName(v,40,/^[A-Za-z0-9 \-#()&'\/%]*$/),
   autofix:  v => fixSp(v) },
 
@@ -271,7 +271,7 @@ const SCHEMA_COLUMNS = [
   validate: v => chkName(v,20,/^[A-Za-z \-]*$/),
   autofix:  v => fixSp(v) },
 
-{ col:'AC', name:'Recipient Last Name',                        group:'Recipient', required:false,
+{ col:'AC', name:'Recipient Last Name (Surname)',                        group:'Recipient', required:false,
   validate: (v,r) => { if(r?.X==='I'&&blank(v)) return 'Required when Name Type is "I"'; if(!blank(r?.AA)&&blank(v)) return 'Required when First Name is provided'; return chkName(v,20,/^[A-Za-z \-]*$/); },
   autofix:  v => fixSp(v) },
 
@@ -279,15 +279,15 @@ const SCHEMA_COLUMNS = [
   validate: v => chkName(v,20,/^[A-Za-z \-]*$/),
   autofix:  v => fixSp(v) },
 
-{ col:'AE', name:'Additional Recipient Name',                  group:'Recipient', required:false,
+{ col:'AE', name:'Additional Recipient Name ',                  group:'Recipient', required:false,
   validate: v => chkAddlName(v),
   autofix:  v => fixSp(v) },
 
-{ col:'AF', name:"Box 13b – Recipient's Country Code (Tax)",   group:'Recipient', required:false,
+{ col:'AF', name:"Box 13b - Recipient's Country code",   group:'Recipient', required:false,
   validate: v => chkCountry(v),
   autofix:  v => fixUp(v) },
 
-{ col:'AG', name:'Box 13c – Recipient Address (Number and Street)', group:'Recipient', required:false,
+{ col:'AG', name:'Box 13c - Recipient Address (number and street)', group:'Recipient', required:false,
   validate: v => chkAddress(v),
   autofix:  v => fixSp(v) },
 
@@ -295,11 +295,11 @@ const SCHEMA_COLUMNS = [
   validate: (v,r) => { if(isUS(r?.AJ)&&blank(v)) return 'Required for domestic addresses'; return chkCity(v); },
   autofix:  v => fixSp(v) },
 
-{ col:'AI', name:'Recipient State/Territory',                  group:'Recipient', required:false,
+{ col:'AI', name:'Recipient State/Province/Territory',                  group:'Recipient', required:false,
   validate: (v,r) => { if(isUS(r?.AJ)&&blank(v)) return 'Required for domestic addresses'; return chkState(v, isUS(r?.AJ)); },
   autofix:  v => fixUp(v) },
 
-{ col:'AJ', name:'Recipient Country (Address)',                group:'Recipient', required:false,
+{ col:'AJ', name:'Recipient Country',                group:'Recipient', required:false,
   validate: v => chkCountry(v),
   autofix:  v => fixUp(v) },
 
@@ -311,7 +311,7 @@ const SCHEMA_COLUMNS = [
   validate: v => { if(blank(v)) return null; return ['SSN','EIN','ATIN','ITIN','QI-EIN','UND'].includes(v) ? null : 'Must be SSN, EIN, ATIN, ITIN, QI-EIN, or UND'; },
   autofix:  v => v ? String(v).toUpperCase().trim() : v },
 
-{ col:'AM', name:"Box 13e – Recipient's U.S. TIN",             group:'Recipient', required:false,
+{ col:'AM', name:"Box 13e - Recipient's U.S. TIN, if any",             group:'Recipient', required:false,
   validate: (v,r) => {
     if (blank(v)) return null;
     const t = r?.AL;
@@ -323,203 +323,203 @@ const SCHEMA_COLUMNS = [
   },
   autofix: (v,r) => { if(!v) return v; const t=r?.AL; if(t==='EIN'||t==='QI-EIN') return fixEIN(v); if(t==='SSN'||t==='ITIN'||t==='ATIN') return fixSSN(v); return v; } },
 
-{ col:'AN', name:'Box 13f – Recipient Ch. 3 Status Code',      group:'Recipient', required:false,
+{ col:'AN', name:'Box 13f - Ch. 3 status code',      group:'Recipient', required:false,
   validate: v => chkCode(v, CH3_RECIP),
   autofix:  v => fixCode2(v) },
 
-{ col:'AO', name:'Box 13g – Recipient Ch. 4 Status Code',      group:'Recipient', required:false,
+{ col:'AO', name:'Box 13g - Ch. 4 status code',      group:'Recipient', required:false,
   validate: v => chkCode(v, CH4_ALL),
   autofix:  v => fixCode2(v) },
 
-{ col:'AP', name:"Box 13h – Recipient's GIIN",                  group:'Recipient', required:false,
+{ col:'AP', name:"Box 13h - Recipient's GIIN",                  group:'Recipient', required:false,
   validate: v => chkGIIN(v),
   autofix:  v => v ? String(v).trim() : v },
 
-{ col:'AQ', name:"Box 13i – Recipient's Foreign Tax ID Number", group:'Recipient', required:false,
+{ col:'AQ', name:"Box 13i - Recipient's foreign tax identification number, if any", group:'Recipient', required:false,
   validate: v => chkFTIN(v),
   autofix:  v => v ? String(v).trim() : v },
 
-{ col:'AR', name:'Box 13j – LOB Code',                         group:'Recipient', required:false,
+{ col:'AR', name:'Box 13j - LOB code',                         group:'Recipient', required:false,
   validate: v => chkCode(v, LOB),
   autofix:  v => fixCode2(v) },
 
-{ col:'AS', name:"Box 13k – Recipient's Account Number",        group:'Recipient', required:false,
+{ col:'AS', name:"Box 13k - Recipient's account number",        group:'Recipient', required:false,
   validate: v => chkAcct(v),
   autofix:  v => v ? String(v).trim() : v },
 
-{ col:'AT', name:"Box 13l – Recipient's Date of Birth",         group:'Recipient', required:false,
+{ col:'AT', name:"Box 13l - Recipient's date of birth",         group:'Recipient', required:false,
   validate: v => chkDate(v),
   autofix:  v => fixDate(v) },
 
 // ── Income & Tax ──────────────────────────────────────────────────────────────
-{ col:'AU', name:'Box 1 – Income Code',                        group:'Income & Tax', required:true,
+{ col:'AU', name:'Box 1 - Income code',                        group:'Income & Tax', required:true,
   validate: v => blank(v) ? 'Required' : chkCode(v, INCOME),
   autofix:  v => fixCode2(v) },
 
-{ col:'AV', name:'Box 2 – Gross Income',                       group:'Income & Tax', required:true,
+{ col:'AV', name:'Box 2 - Gross income',                       group:'Income & Tax', required:true,
   validate: v => blank(v) ? 'Required' : chkMoney(v),
   autofix:  v => fixMoney(v) },
 
-{ col:'AW', name:'Box 3 – Chapter Indicator',                  group:'Income & Tax', required:true,
+{ col:'AW', name:'Box 3 - Chapter indicator',                  group:'Income & Tax', required:true,
   validate: v => blank(v) ? 'Required' : (v==='3'||v==='4') ? null : 'Must be "3" or "4"',
   autofix:  v => v },
 
-{ col:'AX', name:'Box 3a – Ch. 3 Exemption Code',              group:'Income & Tax', required:false,
+{ col:'AX', name:'Box 3a - Exemption code',              group:'Income & Tax', required:false,
   validate: (v,r) => { if(r?.AW==='3'&&blank(v)) return 'Required when Chapter Indicator is 3'; return chkCode(v, CH3_EX); },
   autofix:  v => fixCode2(v) },
 
-{ col:'AY', name:'Box 3b – Ch. 3 Tax Rate',                    group:'Income & Tax', required:false,
+{ col:'AY', name:'Box 3b - Tax rate',                    group:'Income & Tax', required:false,
   validate: (v,r) => { if(!blank(r?.AX)&&blank(v)) return 'Required when Ch. 3 Exemption Code is entered'; return chkCode(v, CH3_RATE); },
   autofix:  v => fixCH3Rate(v) },
 
-{ col:'AZ', name:'Box 4a – Ch. 4 Exemption Code',              group:'Income & Tax', required:true,
+{ col:'AZ', name:'Box 4a - Exemption code',              group:'Income & Tax', required:true,
   validate: v => blank(v) ? 'Required' : chkCode(v, CH4_EX),
   autofix:  v => fixCode2(v) },
 
-{ col:'BA', name:'Box 4b – Ch. 4 Tax Rate',                    group:'Income & Tax', required:true,
+{ col:'BA', name:'Box 4b - Tax rate',                    group:'Income & Tax', required:true,
   validate: v => blank(v) ? 'Required' : chkCode(v, CH4_RATE),
   autofix:  v => fixCH4Rate(v) },
 
-{ col:'BB', name:'Box 5 – Withholding Allowance',              group:'Income & Tax', required:false,
+{ col:'BB', name:'Box 5 - Withholding allowance',              group:'Income & Tax', required:false,
   validate: v => chkMoney(v),
   autofix:  v => fixMoney(v) },
 
-{ col:'BC', name:'Box 6 – Net Income',                         group:'Income & Tax', required:false,
+{ col:'BC', name:'Box 6 - Net income',                         group:'Income & Tax', required:false,
   validate: v => chkMoney(v),
   autofix:  v => fixMoney(v) },
 
-{ col:'BD', name:'Box 7a – Federal Tax Withheld',              group:'Income & Tax', required:true,
+{ col:'BD', name:'Box 7a - Federal tax withheld',              group:'Income & Tax', required:true,
   validate: v => blank(v) ? 'Required' : chkMoney(v),
   autofix:  v => fixMoney(v) },
 
-{ col:'BE', name:'Box 7b – Federal Tax Not Deposited (Escrow)', group:'Income & Tax', required:false,
+{ col:'BE', name:'Box 7b - Check if federal tax withheld was not deposited with the IRS because escrow procedures were applied', group:'Income & Tax', required:false,
   validate: v => chkYN(v),
   autofix:  v => v ? String(v).toUpperCase() : v },
 
-{ col:'BF', name:'Box 7c – Withholding in Subsequent Year',    group:'Income & Tax', required:false,
+{ col:'BF', name:'Box 7c - Check if withholding occurred in subsequent year with respect to a partnership interest',    group:'Income & Tax', required:false,
   validate: v => chkYN(v),
   autofix:  v => v ? String(v).toUpperCase() : v },
 
-{ col:'BG', name:'Box 7d – QI/WFP/WFT Revising Reporting',    group:'Income & Tax', required:false,
+{ col:'BG', name:'Box 7d - Check if you are a qualified intermediary, withholding foreign partnership, or withholding foreign trust revising its reporting on Form 1042-S to report to a specific recipient',    group:'Income & Tax', required:false,
   validate: v => chkYN(v),
   autofix:  v => v ? String(v).toUpperCase() : v },
 
-{ col:'BH', name:'Box 8 – Tax Withheld by Other Agents',       group:'Income & Tax', required:true,
+{ col:'BH', name:'Box 8 - Tax withheld by other agents',       group:'Income & Tax', required:true,
   validate: v => blank(v) ? 'Required' : chkMoney(v),
   autofix:  v => fixMoney(v) },
 
-{ col:'BI', name:'Box 9 – Overwithheld Tax Repaid to Recipient', group:'Income & Tax', required:false,
+{ col:'BI', name:'Box 9 - Overwithheld tax repaid to recipient pursuant to adjustment procedures', group:'Income & Tax', required:false,
   validate: v => chkMoney(v),
   autofix:  v => fixMoney(v) },
 
-{ col:'BJ', name:'Box 11 – Tax Paid by Withholding Agent',     group:'Income & Tax', required:false,
+{ col:'BJ', name:'Box 11 - Tax paid by withholding agent',     group:'Income & Tax', required:false,
   validate: v => chkMoney(v),
   autofix:  v => fixMoney(v) },
 
 // ── Primary Withholding Agent ─────────────────────────────────────────────────
-{ col:'BK', name:"Box 14a – Primary Withholding Agent's Name", group:'Primary WA', required:false,
+{ col:'BK', name:"Box 14a - Primary withholding agent's name", group:'Primary WA', required:false,
   validate: v => chkName(v,40,/^[A-Za-z0-9 \-#()&']*$/),
   autofix:  v => fixSp(v) },
 
-{ col:'BL', name:"Box 14b – Primary Withholding Agent's EIN",  group:'Primary WA', required:false,
+{ col:'BL', name:"Box 14b - Primary withholding agent's EIN",  group:'Primary WA', required:false,
   validate: v => chkEIN(v),
   autofix:  v => fixEIN(v) },
 
-{ col:'BM', name:"Additional Primary Withholding Agent's Name", group:'Primary WA', required:false,
+{ col:'BM', name:"Additional Primary withholding agent's Name", group:'Primary WA', required:false,
   validate: v => chkAddlName(v),
   autofix:  v => fixSp(v) },
 
 // ── Intermediary / Flow-Through ───────────────────────────────────────────────
-{ col:'BN', name:'Box 15 – Pro-Rata Basis Reporting',          group:'Intermediary', required:false,
+{ col:'BN', name:'Box 15 - Check if pro-rata basis reporting',          group:'Intermediary', required:false,
   validate: v => chkYN(v),
   autofix:  v => v ? String(v).toUpperCase() : v },
 
-{ col:'BO', name:"Box 15a – Intermediary/FT Entity EIN",       group:'Intermediary', required:false,
+{ col:'BO', name:"Box 15a - Intermediary or flow-through entity's EIN, if any",       group:'Intermediary', required:false,
   validate: v => chkEIN(v),
   autofix:  v => fixEIN(v) },
 
-{ col:'BP', name:'Box 15b – Intermediary Ch. 3 Status Code',   group:'Intermediary', required:false,
+{ col:'BP', name:'Box 15b - Ch. 3 status code',   group:'Intermediary', required:false,
   validate: v => chkCode(v, CH3_WA),
   autofix:  v => fixCode2(v) },
 
-{ col:'BQ', name:'Box 15c – Intermediary Ch. 4 Status Code',   group:'Intermediary', required:false,
+{ col:'BQ', name:'Box 15c - Ch. 4 status code',   group:'Intermediary', required:false,
   validate: v => chkCode(v, CH4_ALL),
   autofix:  v => fixCode2(v) },
 
-{ col:'BR', name:'Box 15d – Intermediary/FT Entity Name Type', group:'Intermediary', required:false,
+{ col:'BR', name:"Box 15d - Intermediary or flow-through entity's name", group:'Intermediary', required:false,
   validate: v => { if(blank(v)) return null; return (v==='B'||v==='I') ? null : 'Must be "B" or "I"'; },
   autofix:  v => fixUp(v) },
 
-{ col:'BS', name:'Intermediary/FT Business/Entity Name Line 1', group:'Intermediary', required:false,
+{ col:'BS', name:"Intermediary or flow-through entity's Business or Entity Name Line 1", group:'Intermediary', required:false,
   validate: (v,r) => { if(r?.BR==='B'&&blank(v)) return 'Required when Intermediary Name Type is "B"'; return chkName(v,40,/^[A-Za-z0-9 \-#()&']*$/); },
   autofix:  v => fixSp(v) },
 
-{ col:'BT', name:'Intermediary/FT Business/Entity Name Line 2', group:'Intermediary', required:false,
+{ col:'BT', name:"Intermediary or flow-through entity's Business or Entity Name Line 2", group:'Intermediary', required:false,
   validate: v => chkName(v,40,/^[A-Za-z0-9 \-#()&'\/%]*$/),
   autofix:  v => fixSp(v) },
 
-{ col:'BU', name:'Intermediary/FT First Name',                 group:'Intermediary', required:false,
+{ col:'BU', name:"Intermediary or flow-through entity's First Name",                 group:'Intermediary', required:false,
   validate: (v,r) => { if(r?.BR==='I'&&blank(v)) return 'Required when Intermediary Name Type is "I"'; return chkName(v,10,/^[A-Za-z \-]*$/); },
   autofix:  v => fixSp(v) },
 
-{ col:'BV', name:'Intermediary/FT Middle Name',                group:'Intermediary', required:false,
+{ col:'BV', name:"Intermediary or flow-through entity's Middle Name",                group:'Intermediary', required:false,
   validate: v => chkName(v,10,/^[A-Za-z \-]*$/),
   autofix:  v => fixSp(v) },
 
-{ col:'BW', name:'Intermediary/FT Last Name',                  group:'Intermediary', required:false,
+{ col:'BW', name:"Intermediary or flow-through entity's Last Name (Surname)",                  group:'Intermediary', required:false,
   validate: (v,r) => { if(r?.BR==='I'&&blank(v)) return 'Required when Intermediary Name Type is "I"'; return chkName(v,10,/^[A-Za-z \-]*$/); },
   autofix:  v => fixSp(v) },
 
-{ col:'BX', name:'Intermediary/FT Suffix',                     group:'Intermediary', required:false,
+{ col:'BX', name:"Intermediary or flow-through entity's Suffix",                     group:'Intermediary', required:false,
   validate: v => chkName(v,5,/^[A-Za-z \-]*$/),
   autofix:  v => fixSp(v) },
 
-{ col:'BY', name:'Additional Intermediary/FT Name',            group:'Intermediary', required:false,
+{ col:'BY', name:"Additional Intermediary or flow-through entity's Name",            group:'Intermediary', required:false,
   validate: v => chkAddlName(v),
   autofix:  v => fixSp(v) },
 
-{ col:'BZ', name:"Box 15e – Intermediary/FT GIIN",             group:'Intermediary', required:false,
+{ col:'BZ', name:"Box 15e - Intermediary or flow-through entity's GIIN",             group:'Intermediary', required:false,
   validate: v => chkGIIN(v),
   autofix:  v => v ? String(v).trim() : v },
 
-{ col:'CA', name:'Box 15f – Intermediary Country Code (Tax)',  group:'Intermediary', required:false,
+{ col:'CA', name:"Box 15f - Intermediary or flow-through entity's Country code",  group:'Intermediary', required:false,
   validate: v => chkCountry(v),
   autofix:  v => fixUp(v) },
 
-{ col:'CB', name:'Box 15g – Intermediary Foreign Tax ID Number', group:'Intermediary', required:false,
+{ col:'CB', name:'Box 15g -  Foreign tax identification number, if any', group:'Intermediary', required:false,
   validate: v => chkFTIN(v),
   autofix:  v => v ? String(v).trim() : v },
 
-{ col:'CC', name:'Box 15h – Intermediary Address (Number and Street)', group:'Intermediary', required:false,
+{ col:'CC', name:'Box 15h - Intermediary or flow-through entity Address (number and street)', group:'Intermediary', required:false,
   validate: v => chkAddress(v),
   autofix:  v => fixSp(v) },
 
-{ col:'CD', name:'Intermediary/FT City/Town',                  group:'Intermediary', required:false,
+{ col:'CD', name:"Intermediary or flow-through entity's City/Town",                  group:'Intermediary', required:false,
   validate: v => chkCity(v),
   autofix:  v => fixSp(v) },
 
-{ col:'CE', name:'Intermediary/FT State/Territory',            group:'Intermediary', required:false,
+{ col:'CE', name:"Intermediary or flow-through entity's State/Territory",            group:'Intermediary', required:false,
   validate: (v,r) => chkState(v, isUS(r?.CF)),
   autofix:  v => fixUp(v) },
 
-{ col:'CF', name:'Intermediary/FT Country (Address)',          group:'Intermediary', required:false,
+{ col:'CF', name:"Intermediary or flow-through entity's Country",          group:'Intermediary', required:false,
   validate: v => chkCountry(v),
   autofix:  v => fixUp(v) },
 
-{ col:'CG', name:'Intermediary/FT ZIP/Postal Code',            group:'Intermediary', required:false,
+{ col:'CG', name:"Intermediary or flow-through entity's ZIP/Postal Code",            group:'Intermediary', required:false,
   validate: (v,r) => chkZIP(v, isUS(r?.CF)),
   autofix:  v => v },
 
 // ── Payer ─────────────────────────────────────────────────────────────────────
-{ col:'CH', name:"Box 16a – Payer's Name Type",                group:'Payer', required:false,
+{ col:'CH', name:"Box 16a - Payer's name",                group:'Payer', required:false,
   validate: v => { if(blank(v)) return null; return (v==='B'||v==='I') ? null : 'Must be "B" or "I"'; },
   autofix:  v => fixUp(v) },
 
-{ col:'CI', name:"Payer's Business/Entity Name Line 1",        group:'Payer', required:false,
+{ col:'CI', name:"Payer's Business or Entity Name Line 1",        group:'Payer', required:false,
   validate: (v,r) => { if(r?.CH==='B'&&blank(v)) return 'Required when Payer Name Type is "B"'; return chkName(v,40,/^[A-Za-z0-9 \-#()&']*$/); },
   autofix:  v => fixSp(v) },
 
-{ col:'CJ', name:"Payer's Business/Entity Name Line 2",        group:'Payer', required:false,
+{ col:'CJ', name:"Payer's Business or Entity Name Line 2",        group:'Payer', required:false,
   validate: v => chkName(v,40,/^[A-Za-z0-9 \-#()&'\/%]*$/),
   autofix:  v => fixSp(v) },
 
@@ -531,7 +531,7 @@ const SCHEMA_COLUMNS = [
   validate: v => chkName(v,10,/^[A-Za-z \-]*$/),
   autofix:  v => fixSp(v) },
 
-{ col:'CM', name:"Payer's Last Name",                          group:'Payer', required:false,
+{ col:'CM', name:"Payer's Last Name (Surname)",                          group:'Payer', required:false,
   validate: (v,r) => { if(r?.CH==='I'&&blank(v)) return 'Required when Payer Name Type is "I"'; return chkName(v,10,/^[A-Za-z \-]*$/); },
   autofix:  v => fixSp(v) },
 
@@ -543,69 +543,69 @@ const SCHEMA_COLUMNS = [
   validate: v => chkAddlName(v),
   autofix:  v => fixSp(v) },
 
-{ col:'CP', name:"Box 16b – Payer's TIN",                      group:'Payer', required:false,
+{ col:'CP', name:"Box 16b - Payer's TIN",                      group:'Payer', required:false,
   validate: v => { if(blank(v)) return null; return /^[\d\-]+$/.test(v) ? null : 'Digits and dashes only'; },
   autofix:  v => v },
 
-{ col:'CQ', name:"Box 16c – Payer's GIIN",                     group:'Payer', required:false,
+{ col:'CQ', name:"Box 16c - Payer's GIIN",                     group:'Payer', required:false,
   validate: v => chkGIIN(v),
   autofix:  v => v ? String(v).trim() : v },
 
-{ col:'CR', name:'Box 16d – Payer Ch. 3 Status Code',          group:'Payer', required:false,
+{ col:'CR', name:'Box 16d - Ch. 3 status code',          group:'Payer', required:false,
   validate: v => chkCode(v, CH3_WA),
   autofix:  v => fixCode2(v) },
 
-{ col:'CS', name:'Box 16e – Payer Ch. 4 Status Code',          group:'Payer', required:false,
+{ col:'CS', name:'Box 16e - Ch. 4 status code',          group:'Payer', required:false,
   validate: v => chkCode(v, CH4_ALL),
   autofix:  v => fixCode2(v) },
 
 // ── State 1 ───────────────────────────────────────────────────────────────────
-{ col:'CT', name:'State 1 – Box 17c – State',                  group:'State Filing', required:false,
+{ col:'CT', name:'State 1 - Box 17c - Select the state that applies to this payer.',                  group:'State Filing', required:false,
   validate: v => { if(blank(v)) return null; return /^[A-Z]{2}$/.test(v) ? null : '2-letter abbreviation required'; },
   autofix:  v => fixUp(v) },
 
-{ col:'CU', name:'State 1 – Box 17a – State Income Tax Withheld', group:'State Filing', required:false,
+{ col:'CU', name:'State 1 - Box 17a - State income tax withheld', group:'State Filing', required:false,
   validate: (v,r) => { if(!blank(r?.CT)&&blank(v)&&blank(r?.CW)&&blank(r?.CX)) return 'At least one payment amount required when State 1 is selected'; return chkMoney(v); },
   autofix:  v => fixMoney(v) },
 
-{ col:'CV', name:"State 1 – Box 17b – State/Payer's State Number", group:'State Filing', required:false,
+{ col:'CV', name:"State 1 - Box 17b - State/Payer's State Number", group:'State Filing', required:false,
   validate: v => chkStateNum(v),
   autofix:  v => v },
 
-{ col:'CW', name:'State 1 – State Income',                     group:'State Filing', required:false,
+{ col:'CW', name:'State 1 - State Income',                     group:'State Filing', required:false,
   validate: v => chkMoney(v),
   autofix:  v => fixMoney(v) },
 
-{ col:'CX', name:'State 1 – Local Income Tax Withheld',        group:'State Filing', required:false,
+{ col:'CX', name:'State 1 - Local income tax withheld',        group:'State Filing', required:false,
   validate: v => chkMoney(v),
   autofix:  v => fixMoney(v) },
 
-{ col:'CY', name:'State 1 – Special Data Entries',             group:'State Filing', required:false,
+{ col:'CY', name:'State 1 - Special Data Entries',             group:'State Filing', required:false,
   validate: v => chkSpcData(v),
   autofix:  v => v ? String(v).trim() : v },
 
 // ── State 2 ───────────────────────────────────────────────────────────────────
-{ col:'CZ', name:'State 2 – State',                            group:'State Filing', required:false,
+{ col:'CZ', name:'State 2 - Select the state that applies to this payer.',                            group:'State Filing', required:false,
   validate: v => { if(blank(v)) return null; return /^[A-Z]{2}$/.test(v) ? null : '2-letter abbreviation required'; },
   autofix:  v => fixUp(v) },
 
-{ col:'DA', name:'State 2 – State Tax Withheld',               group:'State Filing', required:false,
+{ col:'DA', name:'State 2 - State income tax withheld',               group:'State Filing', required:false,
   validate: (v,r) => { if(!blank(r?.CZ)&&blank(v)&&blank(r?.DC)&&blank(r?.DD)) return 'At least one payment amount required when State 2 is selected'; return chkMoney(v); },
   autofix:  v => fixMoney(v) },
 
-{ col:'DB', name:"State 2 – State/Payer's State Number",       group:'State Filing', required:false,
+{ col:'DB', name:"State 2 - State/Payer's State Number",       group:'State Filing', required:false,
   validate: v => chkStateNum(v),
   autofix:  v => v },
 
-{ col:'DC', name:'State 2 – State Income',                     group:'State Filing', required:false,
+{ col:'DC', name:'State 2 - State Income',                     group:'State Filing', required:false,
   validate: v => chkMoney(v),
   autofix:  v => fixMoney(v) },
 
-{ col:'DD', name:'State 2 – Local Income Tax Withheld',        group:'State Filing', required:false,
+{ col:'DD', name:'State 2 - Local income tax withheld',        group:'State Filing', required:false,
   validate: v => chkMoney(v),
   autofix:  v => fixMoney(v) },
 
-{ col:'DE', name:'State 2 – Special Data Entries',             group:'State Filing', required:false,
+{ col:'DE', name:'State 2 - Special Data Entries',             group:'State Filing', required:false,
   validate: v => chkSpcData(v),
   autofix:  v => v ? String(v).trim() : v },
 
