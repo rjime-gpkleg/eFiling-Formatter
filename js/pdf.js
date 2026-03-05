@@ -15,99 +15,83 @@
 // then edit the x/y values below for those columns.
 
 const FIELD_COORDS = {
-  // ── Form header ───────────────────────────────────────────────────────────
-  'B':  { x: 60,  y: 754, maxWidth: 40,  fontSize: 7 },  // Tax Year
-  'W':  { x: 438, y: 754, maxWidth: 120, fontSize: 7 },  // Unique Form Identifier
-
-  // ── Income & Tax (Boxes 1–11) ─────────────────────────────────────────────
-  'AU': { x: 56,  y: 716, maxWidth: 30,  fontSize: 7 },  // Box 1  Income Code
-  'AV': { x: 118, y: 716, maxWidth: 80,  fontSize: 7 },  // Box 2  Gross Income
-  'AW': { x: 280, y: 716, maxWidth: 20,  fontSize: 7 },  // Box 3  Chapter Indicator
-  'AX': { x: 350, y: 716, maxWidth: 30,  fontSize: 7 },  // Box 3a Exemption Code
-  'AY': { x: 430, y: 716, maxWidth: 50,  fontSize: 7 },  // Box 3b Tax Rate
-  'AZ': { x: 350, y: 700, maxWidth: 30,  fontSize: 7 },  // Box 4a Exemption Code
-  'BA': { x: 430, y: 700, maxWidth: 50,  fontSize: 7 },  // Box 4b Tax Rate
-  'BB': { x: 56,  y: 700, maxWidth: 60,  fontSize: 7 },  // Box 5  WH Allowance
-  'BC': { x: 180, y: 700, maxWidth: 60,  fontSize: 7 },  // Box 6  Net Income
-  'BD': { x: 56,  y: 684, maxWidth: 80,  fontSize: 7 },  // Box 7a Federal Tax WH
-  // Checkboxes: draw "X" if value is "Y"
-  'BE': { x: 224, y: 684, maxWidth: 10,  fontSize: 7, checkbox: true }, // Box 7b
-  'BF': { x: 276, y: 684, maxWidth: 10,  fontSize: 7, checkbox: true }, // Box 7c
-  'BG': { x: 328, y: 684, maxWidth: 10,  fontSize: 7, checkbox: true }, // Box 7d
-  'BH': { x: 390, y: 684, maxWidth: 80,  fontSize: 7 },  // Box 8  Tax by Other Agents
-  'BI': { x: 56,  y: 668, maxWidth: 80,  fontSize: 7 },  // Box 9  Overwithheld repaid
-  'BJ': { x: 200, y: 668, maxWidth: 80,  fontSize: 7 },  // Box 11 Tax Paid by WHA
-
-  // ── Withholding Agent (Boxes 12a–12o) ─────────────────────────────────────
-  'C':  { x: 56,  y: 646, maxWidth: 30,  fontSize: 7 },  // Box 12a TIN Type
-  'D':  { x: 130, y: 646, maxWidth: 80,  fontSize: 7 },  // Box 12b EIN
-  'E':  { x: 295, y: 646, maxWidth: 30,  fontSize: 7 },  // Box 12c Ch3 Status
-  'F':  { x: 380, y: 646, maxWidth: 30,  fontSize: 7 },  // Box 12d Ch4 Status
-  'P':  { x: 460, y: 646, maxWidth: 40,  fontSize: 7 },  // Box 12e Country Code
-  'G':  { x: 56,  y: 630, maxWidth: 15,  fontSize: 7 },  // Box 12f Name Type
-  'H':  { x: 90,  y: 630, maxWidth: 160, fontSize: 7 },  // Box 12g Name Line 1
-  'I':  { x: 90,  y: 618, maxWidth: 160, fontSize: 7 },  // Box 12h Name Line 2
-  'R':  { x: 56,  y: 606, maxWidth: 180, fontSize: 7 },  // Box 12i Address
-  'S':  { x: 56,  y: 594, maxWidth: 120, fontSize: 7 },  // Box 12j City
-  'T':  { x: 295, y: 594, maxWidth: 30,  fontSize: 7 },  // Box 12k State
-  'V':  { x: 380, y: 594, maxWidth: 60,  fontSize: 7 },  // Box 12l ZIP
-  'U':  { x: 460, y: 594, maxWidth: 40,  fontSize: 7 },  // Box 12m Country
-  'O':  { x: 56,  y: 582, maxWidth: 100, fontSize: 7 },  // Box 12n GIIN
-  'Q':  { x: 200, y: 582, maxWidth: 120, fontSize: 7 },  // Box 12o Foreign Tax ID
-
-  // ── Recipient (Boxes 13a–13p) ─────────────────────────────────────────────
-  'X':  { x: 56,  y: 506, maxWidth: 15,  fontSize: 7 },  // Box 13a Name Type
-  'Y':  { x: 90,  y: 506, maxWidth: 160, fontSize: 7 },  // Box 13b Name Line 1
-  'Z':  { x: 90,  y: 494, maxWidth: 160, fontSize: 7 },  // Box 13c Name Line 2
-  'AF': { x: 460, y: 494, maxWidth: 40,  fontSize: 7 },  // Box 13d Country Code
-  'AL': { x: 56,  y: 482, maxWidth: 50,  fontSize: 7 },  // Box 13e TIN Type
-  'AM': { x: 140, y: 482, maxWidth: 100, fontSize: 7 },  // Box 13e TIN
-  'AN': { x: 295, y: 482, maxWidth: 30,  fontSize: 7 },  // Box 13f Ch3 Status
-  'AO': { x: 380, y: 482, maxWidth: 30,  fontSize: 7 },  // Box 13g Ch4 Status
-  'AP': { x: 56,  y: 470, maxWidth: 120, fontSize: 7 },  // Box 13h GIIN
-  'AQ': { x: 200, y: 470, maxWidth: 120, fontSize: 7 },  // Box 13i Foreign Tax ID
-  'AR': { x: 380, y: 470, maxWidth: 30,  fontSize: 7 },  // Box 13j LOB Code
-  'AG': { x: 56,  y: 458, maxWidth: 180, fontSize: 7 },  // Box 13k Address
-  'AH': { x: 56,  y: 446, maxWidth: 120, fontSize: 7 },  // Box 13l City
-  'AI': { x: 295, y: 446, maxWidth: 30,  fontSize: 7 },  // Box 13m State
-  'AK': { x: 380, y: 446, maxWidth: 60,  fontSize: 7 },  // Box 13n ZIP
-  'AJ': { x: 460, y: 446, maxWidth: 40,  fontSize: 7 },  // Box 13o Country
-  'AS': { x: 56,  y: 434, maxWidth: 120, fontSize: 7 },  // Box 13k Account No.
-  'AT': { x: 250, y: 434, maxWidth: 80,  fontSize: 7 },  // Box 13l Date of Birth
-
-  // ── Primary Withholding Agent (Box 14) ────────────────────────────────────
-  'BK': { x: 56,  y: 404, maxWidth: 200, fontSize: 7 },  // Box 14a Name
-  'BL': { x: 380, y: 404, maxWidth: 100, fontSize: 7 },  // Box 14b EIN
-
-  // ── Intermediary / Flow-Through (Box 15) ──────────────────────────────────
-  'BN': { x: 56,  y: 386, maxWidth: 15,  fontSize: 7, checkbox: true }, // Box 15 Pro-Rata
-  'BO': { x: 130, y: 374, maxWidth: 80,  fontSize: 7 },  // Box 15a EIN
-  'BP': { x: 295, y: 374, maxWidth: 30,  fontSize: 7 },  // Box 15b Ch3 Status
-  'BQ': { x: 380, y: 374, maxWidth: 30,  fontSize: 7 },  // Box 15c Ch4 Status
-  'BR': { x: 56,  y: 362, maxWidth: 15,  fontSize: 7 },  // Box 15d Name Type
-  'BS': { x: 90,  y: 362, maxWidth: 180, fontSize: 7 },  // Box 15e Name Line 1
-  'BZ': { x: 56,  y: 350, maxWidth: 120, fontSize: 7 },  // Box 15f GIIN
-  'CA': { x: 200, y: 350, maxWidth: 40,  fontSize: 7 },  // Box 15g Country
-  'CB': { x: 300, y: 350, maxWidth: 120, fontSize: 7 },  // Box 15h Foreign Tax ID
-  'CC': { x: 56,  y: 338, maxWidth: 180, fontSize: 7 },  // Box 15i Address
-  'CD': { x: 56,  y: 326, maxWidth: 120, fontSize: 7 },  // Box 15j City
-  'CE': { x: 295, y: 326, maxWidth: 30,  fontSize: 7 },  // Box 15k State
-  'CG': { x: 380, y: 326, maxWidth: 60,  fontSize: 7 },  // Box 15l ZIP
-  'CF': { x: 460, y: 326, maxWidth: 40,  fontSize: 7 },  // Box 15m Country
-
-  // ── Payer (Box 16) ────────────────────────────────────────────────────────
-  'CH': { x: 56,  y: 300, maxWidth: 15,  fontSize: 7 },  // Box 16a Name Type
-  'CI': { x: 90,  y: 300, maxWidth: 180, fontSize: 7 },  // Box 16a Name Line 1
-  'CP': { x: 56,  y: 288, maxWidth: 100, fontSize: 7 },  // Box 16b TIN
-  'CQ': { x: 200, y: 288, maxWidth: 120, fontSize: 7 },  // Box 16c GIIN
-  'CR': { x: 380, y: 288, maxWidth: 30,  fontSize: 7 },  // Box 16d Ch3 Status
-  'CS': { x: 460, y: 288, maxWidth: 30,  fontSize: 7 },  // Box 16e Ch4 Status
-
-  // ── State Tax (Box 17) ────────────────────────────────────────────────────
-  'CU': { x: 56,  y: 260, maxWidth: 100, fontSize: 7 },  // Box 17a State WH
-  'CV': { x: 220, y: 260, maxWidth: 120, fontSize: 7 },  // Box 17b Payer State No.
-  'CT': { x: 400, y: 260, maxWidth: 60,  fontSize: 7 },  // Box 17c State Name
+  'W'  : { x: 257, y: 716, maxWidth:  80, fontSize: 7 },
+  'AU' : { x:  57, y: 705, maxWidth:  30, fontSize: 7 },
+  'AV' : { x:  92, y: 705, maxWidth:  52, fontSize: 7 },
+  'AW' : { x: 150, y: 704, maxWidth:  30, fontSize: 7 },
+  'AX' : { x: 150, y: 692, maxWidth:  40, fontSize: 7 },
+  'AZ' : { x: 237, y: 692, maxWidth:  40, fontSize: 7 },
+  'AY' : { x: 150, y: 680, maxWidth:  55, fontSize: 7 },
+  'BA' : { x: 237, y: 680, maxWidth:  55, fontSize: 7 },
+  'BB' : { x:  57, y: 668, maxWidth: 130, fontSize: 7 },
+  'BC' : { x:  57, y: 656, maxWidth: 130, fontSize: 7 },
+  'BD' : { x:  57, y: 644, maxWidth: 130, fontSize: 7 },
+  'BE' : { x:  57, y: 633, maxWidth:  10, fontSize: 7, checkbox: true },
+  'BF' : { x:  57, y: 609, maxWidth:  10, fontSize: 7, checkbox: true },
+  'BG' : { x:  57, y: 581, maxWidth:  10, fontSize: 7, checkbox: true },
+  'BH' : { x:  57, y: 548, maxWidth: 130, fontSize: 7 },
+  'BI' : { x:  57, y: 537, maxWidth: 130, fontSize: 7 },
+  'BJ' : { x:  57, y: 501, maxWidth: 130, fontSize: 7 },
+  'C'  : { x:  57, y: 477, maxWidth:  28, fontSize: 7 },
+  'D'  : { x:  90, y: 477, maxWidth:  88, fontSize: 7 },
+  'E'  : { x: 186, y: 477, maxWidth: 115, fontSize: 7 },
+  'F'  : { x: 186, y: 465, maxWidth: 115, fontSize: 7 },
+  'G'  : { x:  57, y: 453, maxWidth:  20, fontSize: 7 },
+  'H'  : { x:  83, y: 453, maxWidth: 165, fontSize: 7 },
+  'I'  : { x:  57, y: 429, maxWidth: 245, fontSize: 7 },
+  'P'  : { x:  57, y: 405, maxWidth:  75, fontSize: 7 },
+  'Q'  : { x: 143, y: 405, maxWidth: 160, fontSize: 7 },
+  'O'  : { x:  57, y: 381, maxWidth: 245, fontSize: 7 },
+  'R'  : { x:  57, y: 357, maxWidth:  75, fontSize: 7 },
+  'S'  : { x: 143, y: 357, maxWidth: 160, fontSize: 7 },
+  'T'  : { x:  57, y: 333, maxWidth:  75, fontSize: 7 },
+  'U'  : { x: 143, y: 333, maxWidth:  55, fontSize: 7 },
+  'V'  : { x: 208, y: 333, maxWidth:  97, fontSize: 7 },
+  'X'  : { x:  57, y: 309, maxWidth:  20, fontSize: 7 },
+  'Y'  : { x:  82, y: 309, maxWidth: 115, fontSize: 7 },
+  'AF' : { x: 208, y: 309, maxWidth:  95, fontSize: 7 },
+  'Z'  : { x:  57, y: 285, maxWidth: 245, fontSize: 7 },
+  'AG' : { x:  57, y: 261, maxWidth:  75, fontSize: 7 },
+  'AH' : { x: 143, y: 261, maxWidth: 160, fontSize: 7 },
+  'AI' : { x:  57, y: 237, maxWidth:  75, fontSize: 7 },
+  'AJ' : { x: 143, y: 237, maxWidth:  55, fontSize: 7 },
+  'AK' : { x: 208, y: 237, maxWidth:  97, fontSize: 7 },
+  'AL' : { x: 316, y: 705, maxWidth:  25, fontSize: 7 },
+  'AM' : { x: 343, y: 705, maxWidth:  95, fontSize: 7 },
+  'AN' : { x: 453, y: 705, maxWidth: 105, fontSize: 7 },
+  'AO' : { x: 453, y: 693, maxWidth: 105, fontSize: 7 },
+  'AP' : { x: 316, y: 681, maxWidth: 125, fontSize: 7 },
+  'AQ' : { x: 453, y: 681, maxWidth: 105, fontSize: 7 },
+  'AR' : { x: 316, y: 646, maxWidth:  45, fontSize: 7 },
+  'AS' : { x: 375, y: 646, maxWidth: 183, fontSize: 7 },
+  'AT' : { x: 316, y: 621, maxWidth: 245, fontSize: 7 },
+  'BK' : { x: 316, y: 585, maxWidth: 165, fontSize: 7 },
+  'BL' : { x: 316, y: 561, maxWidth: 165, fontSize: 7 },
+  'BN' : { x: 452, y: 556, maxWidth:  10, fontSize: 7, checkbox: true },
+  'BO' : { x: 316, y: 537, maxWidth: 125, fontSize: 7 },
+  'BP' : { x: 453, y: 534, maxWidth: 105, fontSize: 7 },
+  'BQ' : { x: 453, y: 516, maxWidth: 105, fontSize: 7 },
+  'BR' : { x: 316, y: 501, maxWidth:  20, fontSize: 7 },
+  'BS' : { x: 340, y: 501, maxWidth: 105, fontSize: 7 },
+  'BZ' : { x: 316, y: 477, maxWidth: 245, fontSize: 7 },
+  'CA' : { x: 316, y: 453, maxWidth:  75, fontSize: 7 },
+  'CB' : { x: 403, y: 453, maxWidth: 155, fontSize: 7 },
+  'CC' : { x: 316, y: 429, maxWidth: 245, fontSize: 7 },
+  'CD' : { x: 403, y: 405, maxWidth: 155, fontSize: 7 },
+  'CE' : { x: 316, y: 381, maxWidth:  75, fontSize: 7 },
+  'CF' : { x: 403, y: 381, maxWidth:  55, fontSize: 7 },
+  'CG' : { x: 467, y: 381, maxWidth:  90, fontSize: 7 },
+  'CH' : { x: 316, y: 357, maxWidth:  20, fontSize: 7 },
+  'CI' : { x: 340, y: 357, maxWidth: 135, fontSize: 7 },
+  'CP' : { x: 489, y: 357, maxWidth:  70, fontSize: 7 },
+  'CQ' : { x: 316, y: 333, maxWidth: 125, fontSize: 7 },
+  'CR' : { x: 453, y: 333, maxWidth: 105, fontSize: 7 },
+  'CS' : { x: 453, y: 321, maxWidth: 105, fontSize: 7 },
+  'CU' : { x: 316, y: 309, maxWidth: 100, fontSize: 7 },
+  'CV' : { x: 425, y: 309, maxWidth:  75, fontSize: 7 },
+  'CT' : { x: 511, y: 309, maxWidth:  55, fontSize: 7 },
 };
+
 
 // ─── Core export functions ─────────────────────────────────────────────────────
 
