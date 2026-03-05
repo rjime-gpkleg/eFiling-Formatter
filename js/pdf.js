@@ -124,14 +124,30 @@ async function buildFilledPDF(rowObjs) {
     throw new Error('Could not load PDF template (pdfs/f1042s.pdf): ' + err.message);
   }
 
-  const template = await PDFDocument.load(templateBytes, { ignoreEncryption: true });
-  const out      = await PDFDocument.create();
-  const font     = await out.embedFont(StandardFonts.Helvetica);
-  const black    = rgb(0, 0, 0);
+  let template;
+  try {
+    template = await PDFDocument.load(templateBytes, { ignoreEncryption: true });
+  } catch (err) {
+    throw new Error('pdf-lib could not parse the template PDF: ' + err.message);
+  }
+
+  const out   = await PDFDocument.create();
+  const font  = await out.embedFont(StandardFonts.Helvetica);
+  const black = rgb(0, 0, 0);
 
   for (const row of rowObjs) {
     // Copy Copy-A page (index 0) from template into output
-    const [page] = await out.copyPagesFrom(template, [0]);
+    let page;
+    try {
+      [page] = await out.copyPagesFrom(template, [0]);
+    } catch (err) {
+      throw new Error(
+        'The IRS template PDF has copy-protection that blocks page cloning. ' +
+        'Open f1042s.pdf in a PDF viewer, print to "Microsoft Print to PDF" or ' +
+        '"Save as PDF", then replace pdfs/f1042s.pdf with that copy. ' +
+        '(pdf-lib: ' + err.message + ')'
+      );
+    }
     out.addPage(page);
 
     for (const [col, coords] of Object.entries(FIELD_COORDS)) {
