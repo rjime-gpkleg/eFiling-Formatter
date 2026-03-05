@@ -157,13 +157,16 @@ main { max-width: 1180px; margin: 20px auto; padding: 0 16px 56px; }
     </div>
     <div class="btn-row">
       <button class="btn btn-success" id="btn-export">⬇ Download CSV</button>
+      <button class="btn btn-primary"  id="btn-pdf">⬇ Download PDF</button>
     </div>
   </div>
 </main>
 
 <div id="tip" class="tip"></div>
 
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script src="js/schema.js"></script>
+<script src="js/pdf.js"></script>
 <script>
 'use strict';
 
@@ -596,6 +599,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-clear').onclick  = clearForm;
   document.getElementById('btn-add').onclick    = addOrUpdate;
   document.getElementById('btn-export').onclick = downloadCSV;
+  document.getElementById('btn-pdf').onclick    = () =>
+    downloadPDF(records.map(r => ({ ...r })), `1042S_manual_${new Date().toISOString().slice(0,10)}.pdf`);
 });
 </script>
 

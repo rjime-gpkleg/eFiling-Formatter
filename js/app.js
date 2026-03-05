@@ -2,13 +2,14 @@
 'use strict';
 
 // ─── State ────────────────────────────────────────────────────────────────────
-let csvHeaders   = [];   // string[]
-let csvRows      = [];   // string[][] (data rows, no header)
-let mapping      = {};   // { colLetter: headerIndex | -1 }
-let staticValues = {};   // { colLetter: string } — user-typed fixed values
-let validated    = [];   // per-row error maps: { colLetter: errorString }
-let activePreset = null; // currently applied PRESETS entry (or null)
-let allParsed    = [];   // all rows from parseCSV (before header row split)
+let csvHeaders    = [];   // string[]
+let csvRows       = [];   // string[][] (data rows, no header)
+let mapping       = {};   // { colLetter: headerIndex | -1 }
+let staticValues  = {};   // { colLetter: string } — user-typed fixed values
+let validated     = [];   // per-row error maps: { colLetter: errorString }
+let activePreset  = null; // currently applied PRESETS entry (or null)
+let allParsed     = [];   // all rows from parseCSV (before header row split)
+let activeHeaderRow = 6;  // header row number last applied (1-indexed)
 
 // ─── CSV Parser ───────────────────────────────────────────────────────────────
 function parseCSV(text) {
@@ -175,7 +176,7 @@ function initUpload() {
     if (allParsed.length) {
       const hRow = parseInt(hdrInput?.value) || 1;
       const { headers, rows } = applyHeaderRow(allParsed, hRow);
-      if (rows.length) { csvHeaders = headers; csvRows = rows; }
+      if (rows.length) { activeHeaderRow = hRow; csvHeaders = headers; csvRows = rows; }
     }
     // Apply selected preset (if any) before building mapping UI
     const presetId = presetSel?.value;
@@ -191,10 +192,12 @@ function initUpload() {
     const hRow = parseInt(hdrInput?.value) || 1;
     const { headers, rows } = applyHeaderRow(allParsed, hRow);
     if (rows.length < 1) { showMsg(info, 'No data rows found after the header row.', 'error'); return; }
+    activeHeaderRow = hRow;
     csvHeaders = headers;
     csvRows    = rows;
     mapping    = autoMap(csvHeaders);
-    showMsg(info, `✓ Loaded: ${file.name} — ${csvRows.length} data row(s), ${csvHeaders.length} column(s)`, 'success');
+    const preview = csvHeaders.filter(Boolean).slice(0, 3).map(h => h.trim()).join(', ');
+    showMsg(info, `✓ Loaded: ${file.name} — ${csvRows.length} data row(s), ${csvHeaders.length} column(s) · Row ${hRow} header: ${preview}…`, 'success');
     btnNext.disabled = false;
   }
 
@@ -220,8 +223,9 @@ function initUpload() {
         const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
         const sheetName = wb.SheetNames.find(n => n.trim() === 'IRS-1042S') ?? wb.SheetNames[0];
         const ws = wb.Sheets[sheetName];
-        const raw = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false, defval: '' });
+        const raw = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false, defval: '', blankrows: true });
         allParsed = raw.map(r => Array.isArray(r) ? r.map(c => String(c ?? '')) : []);
+        while (allParsed.length && allParsed[allParsed.length - 1].every(c => c.trim() === '')) allParsed.pop();
         applyParsed(file);
       };
       reader.readAsArrayBuffer(file);
@@ -235,12 +239,14 @@ function initUpload() {
       const hRow = parseInt(hdrInput.value) || 1;
       const { headers, rows } = applyHeaderRow(allParsed, hRow);
       if (!rows.length) return;
+      activeHeaderRow = hRow;
       csvHeaders = headers;
       csvRows    = rows;
       mapping    = autoMap(csvHeaders);
+      const preview = csvHeaders.filter(Boolean).slice(0, 3).map(h => h.trim()).join(', ');
       const info = document.getElementById('fileInfo');
       if (info.classList.contains('success')) {
-        info.textContent = info.textContent.replace(/\d+ data row\(s\), \d+ column\(s\)/, `${csvRows.length} data row(s), ${csvHeaders.length} column(s)`);
+        showMsg(info, info.textContent.replace(/— .+$/, `— ${csvRows.length} data row(s), ${csvHeaders.length} column(s) · Row ${hRow} header: ${preview}…`), 'success');
       }
     });
   }
@@ -380,7 +386,7 @@ function renderResults() {
   validated.forEach((rowErrs, rowIdx) => {
     const errs = Object.entries(rowErrs);
     if (!errs.length) return;
-    const rowNum = rowIdx + 2;
+    const rowNum = rowIdx + activeHeaderRow + 1; // actual row number in the source file
     const section = document.createElement('details');
     section.open = rowIdx < 5;
     section.className = 'error-row';
@@ -402,6 +408,24 @@ function renderResults() {
 
   document.getElementById('btn-results-back').onclick = () => goStep(2);
   document.getElementById('btn-download').onclick     = () => downloadCSV();
+
+  const btnPdf = document.getElementById('btn-pdf');
+  if (btnPdf) {
+    btnPdf.disabled = false;
+    btnPdf.onclick  = () => {
+      const rowObjs = csvRows.map(rowArr => {
+        const obj = buildRowObj(rowArr);
+        const fixed = {};
+        for (const col of SCHEMA_COLUMNS) {
+          let v = obj[col.col];
+          try { v = col.autofix(v, obj) ?? v; } catch(e) { /* keep */ }
+          fixed[col.col] = v;
+        }
+        return fixed;
+      });
+      downloadPDF(rowObjs, `1042S_formatted_${new Date().toISOString().slice(0,10)}.pdf`);
+    };
+  }
 }
 
 function downloadCSV() {
